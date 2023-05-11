@@ -33,7 +33,7 @@ export class WhmcsAPI {
       connection?.end();
     }
     if (!whmcsID) {
-      console.log(`Could not find WHMCS ID for ${discordUserName}`);
+      console.log(`Could not find WHCMS ID for ${discordUserName}`);
     }
     return whmcsID;
   }
