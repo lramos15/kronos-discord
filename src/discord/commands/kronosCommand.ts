@@ -30,7 +30,7 @@ export default class KronosCommand implements ICommand {
 
 	async execute(interaction: ChatInputCommandInteraction) {
 		await interaction.deferReply({ ephemeral: true });
-		const whmcsID = await this._whcmsAPI.getWHCMSId('CaptainPullOut#6239' ?? interaction.user.tag);
+		const whmcsID = await this._whcmsAPI.getWHCMSId(interaction.user.tag);
 		const kronosUserId = whmcsID ? await this._kronosManager.getKronosUserId(whmcsID) : undefined;
 		if (!kronosUserId) {
 			await interaction.editReply('Kronos customer not found! If you believe this to be incorrect, please contact an admin!');
