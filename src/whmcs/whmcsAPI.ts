@@ -26,7 +26,10 @@ export class WhmcsAPI {
     try {
       connection = await this._dbPool.getConnection();
       const rows = await connection.query('SELECT relid FROM tblcustomfieldsvalues WHERE fieldid = ? AND value = ?;', [WhmcsAPI.discordFieldId, discordUserName]);
-      whmcsID = rows[0]?.relid ?? undefined;
+      if (rows.length > 1) {
+        console.warn(`Found multiple WHMCS IDs for ${discordUserName}`);
+      }
+      whmcsID = rows[rows.length - 1]?.relid ?? undefined;
     } catch (error) {
       console.error(error);
     } finally {

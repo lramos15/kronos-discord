@@ -33,7 +33,14 @@ export class KronosAdminAPI implements KronosAPIFetcher {
     const endpoint = `${this._kronosEndpoint}/api/admin/users?query=${whmcsId}&filterStatus=all&perpage=50&page=1&sortColumn=whmcs_id&sortDirection=desc`;
     try {
       const response = await this.makeRequestAsAdmin(endpoint, 'GET');
-      return response.data[0]?.id;
+      // Loop through all the responses and find the one that matches the WHMCS ID
+      // TODO Find a better way to filter based on WHMCS Id so that it is impossible for multiple results to be returned
+      for (const user of response.data) {
+        if (user.whmcs_id === whmcsId) {
+          return user.id;
+        }
+      }
+      return undefined;
     } catch (err) {
       console.error(err);
     }
