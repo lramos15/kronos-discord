@@ -16,5 +16,8 @@ COPY . .
 # Build the app
 RUN npm run build
 
+# Register the slash commands
+RUN npm run registerCommands
+
 # Start the app
 CMD [ "npm", "run", "start" ]
