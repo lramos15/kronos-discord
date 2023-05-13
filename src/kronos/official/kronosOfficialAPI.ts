@@ -17,39 +17,31 @@ export class KronosOfficialAPI implements KronosAPIFetcher {
    * @returns A list of services returned from the official Kronos API
    */
   public async getAllServices(userId: number): Promise<OfficialKronosService[]> {
-    const services = await this._rawServiceRequest(userId, 'Kronos');
-
-    return services.map((s: APIServiceResponse) => new OfficialKronosService(s, this._kronosEndpoint, this._kronosToken));
-  }
-
-  /**
-   * Simple fetcher that supports getting all the services for a given user id whether it be Kronos or WHMCS
-   * @param userId The Kronos or WHMCS user id
-   * @param id_type The type of ID
-   * @returns The list of services returned from the Kronos API
-   */
-  private async _rawServiceRequest(userId: number, id_type: 'WHMCS' | 'Kronos'): Promise<APIServiceResponse[]> {
     const serviceEndpoint = `${this._kronosEndpoint}/api/v1/services`;
     const limit = 500;
-    const userQuery = id_type === 'WHMCS' ? `whmcs_rel_id=${userId}` : `user_id=${userId}`;
-    const serviceEndpointWithQuery = `${serviceEndpoint}?limit=${limit}&${userQuery}`;
+    const serviceEndpointWithQuery = `${serviceEndpoint}?limit=${limit}&user_id=${userId}`;
     const services = (await axios.get(serviceEndpointWithQuery, {
       headers: {
         'Authorization': `Bearer ${this._kronosToken}`,
       }
     })).data.data;
 
-    return services;
+    return services.map((s: APIServiceResponse) => new OfficialKronosService(s, this._kronosEndpoint, this._kronosToken));
   }
 
   /**
-   * TODO - Test this, as I'm unsure if whmcs_rel_id is correct
    * Gets a Kronos user ID from a WHMCS user id
    * @param whmcsId The WHMCS user id
    * @returns The Kronos user id
    */
   public async getKronosUserId(whmcsId: number): Promise<number | undefined> {
-    const services = await this._rawServiceRequest(whmcsId, 'WHMCS');
-    return services[0]?.user.id;
+    const endpoint = `${this._kronosEndpoint}/api/v1/users?whmcs_user_id=${whmcsId}`;
+    const users = (await axios.get(endpoint, {
+      headers: {
+        'Authorization': `Bearer ${this._kronosToken}`,
+      }
+    })).data.data;
+    
+    return users.id;
   }
 }
