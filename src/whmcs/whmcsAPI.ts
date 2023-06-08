@@ -20,7 +20,7 @@ export class WhmcsAPI {
     });
   }
 
-  public async getWHCMSId(discordUserName: string): Promise<number | undefined> {
+  public async getWHMCSId(discordUserName: string): Promise<number | undefined> {
     let connection: PoolConnection | undefined;
     let whmcsID: number | undefined = undefined;
     try {
