@@ -83,6 +83,7 @@ export class KronosEmbed {
     const activeStreamString = streamInfo.activeStreams !== undefined ? `${streamInfo.activeStreams} stream(s)` : 'Unknown';
     const activeTranscodeString = streamInfo.activeTranscodes !== undefined ? `${streamInfo.activeTranscodes} transcode(s)` : 'Unknown';
     const gpuTranscodingString = currentService.supportsGPUTranscoding ? '<a:check:972631736624250950>' : '❌';
+    const serverId = currentService.serviceId;
     const kronosEmbed = new EmbedBuilder()
       .setColor(0x0099FF)
       .setAuthor({ name: 'Kronos Bot' })
@@ -92,10 +93,10 @@ export class KronosEmbed {
         { name: 'Service Status', value: this.prettifyServiceStatus(serviceStatus), inline: true },
         { name: 'Product', value: currentService.product, inline: true },
         { name: 'GPU Transcoding', value: gpuTranscodingString, inline: true },
+        { name: 'Node', value: currentService.nodeAlias, inline: true },
+        { name: 'Folder Name', value: currentService.containerFolderName, inline: true },
+        { name: 'Service ID', value: serverId.toString(), inline: true },
         { name: 'Plex URL', value: plexURL, inline: false },
-        {name: 'Node', value: currentService.nodeAlias, inline: true},
-        { name: 'Folder Name', value: currentService.containerFolderName, inline: true},
-        {name: '\u200b', value: '\u200b', inline: true},
         { name: 'Active Streams', value: activeStreamString, inline: true },
         { name: 'Active Transcodes', value: activeTranscodeString, inline: true },
       )
